@@ -17,6 +17,8 @@ ACheckpointBox::ACheckpointBox()
 void ACheckpointBox::BeginPlay()
 {
 	Super::BeginPlay();
+
+	DrawDebugBox(GetWorld(), GetActorLocation(), GetComponentsBoundingBox().GetExtent(), FColor::Purple, true, -1, 0, 5);
 }
 
 void ACheckpointBox::OnOverlapBegin(class AActor* OverlappedActor, class AActor* OtherActor)

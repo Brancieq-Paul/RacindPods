@@ -108,5 +108,5 @@ void APawnVehicle::setRespawnLocation(FVector LocToSave)
 
 FVector APawnVehicle::getRespawnLocation()
 {
-	return FVector();
+	return FVector(RespawnLocation);
 }
