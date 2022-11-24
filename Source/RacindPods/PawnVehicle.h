@@ -34,17 +34,11 @@ public:
 	void setRespawnLocation(FVector LocToSave);
 	FVector getRespawnLocation();
 
-protected:
-
 	// Camera variables
 	UPROPERTY(Category = Camera, EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 		class USpringArmComponent* SpringArm;
 	UPROPERTY(Category = Camera, EditDefaultsOnly, BlueprintReadonly, meta = (AllowPrivateAccess = "true"))
 		class UCameraComponent* Camera;
-	UPROPERTY(Category = Camera, EditDefaultsOnly, BlueprintReadonly)
-		float TargetArmLength = 500.0f;
-	UPROPERTY(Category = Camera, EditDefaultsOnly, BlueprintReadonly)
-		float FieldOfView = 90.0f;
 
 	// Tire variables
 	UPROPERTY(Category = Tire, EditDefaultsOnly, BlueprintReadOnly)
