@@ -103,7 +103,7 @@ void APawnVehicle::OnHandbrakeReleased()
 
 void APawnVehicle::setRespawnLocation(FVector LocToSave)
 {
-
+	RespawnLocation = LocToSave;
 }
 
 FVector APawnVehicle::getRespawnLocation()
