@@ -18,6 +18,9 @@ protected:
 
 	virtual void BeginPlay() override;
 
+	UPROPERTY(Category = Race, EditAnywhere, BlueprintReadOnly)
+		bool lastCheckpoint;
+
 public:
 
 	ACheckpointBox();

@@ -6,6 +6,10 @@
 #include "Camera/CameraComponent.h"
 #include "WheeledVehicleMovementcomponent4w.h"
 
+#define print(text) if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 1.5, FColor::Green,text)
+#define printf(text, fstring) if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT(text), fstring))
+
+
 APawnVehicle::APawnVehicle()
 {
 	UWheeledVehicleMovementComponent4W* Vehicle4W = CastChecked<UWheeledVehicleMovementComponent4W>(GetVehicleMovement());
@@ -109,4 +113,34 @@ void APawnVehicle::setRespawnLocation(FVector LocToSave)
 FVector APawnVehicle::getRespawnLocation()
 {
 	return FVector(RespawnLocation);
+}
+
+void APawnVehicle::increaseLap()
+{
+	currentLap++;
+	if (currentLap == 1)
+	{
+		FTimerHandle UnusedHandle;
+		GetWorldTimerManager().SetTimer(UnusedHandle, this, &APawnVehicle::startTimer, 1, true);
+	}
+	if (currentLap == maxCurrentLap)
+	{
+		endGame();
+	}
+}
+
+int APawnVehicle::getCurrentLap()
+{
+	return currentLap;
+}
+
+void APawnVehicle::endGame()
+{
+	print("ENDGAME");
+}
+
+void APawnVehicle::startTimer()
+{
+	seconds++;
+    // printf("seconds : %d", seconds);
 }

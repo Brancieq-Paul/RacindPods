@@ -25,7 +25,12 @@ void ACheckpointBox::OnOverlapBegin(class AActor* OverlappedActor, class AActor*
 {
 	if (APawnVehicle* Vehicle = Cast<APawnVehicle>(OtherActor))
 	{
-		printf("Overlapped Actor = %s", *OtherActor->GetName());
+		if (lastCheckpoint)
+		{
+			Vehicle->increaseLap();
+			// printf("currentLap = %d", Vehicle->getCurrentLap());
+		}
+        // printf("Overlapped Actor = %s", *OtherActor->GetName());
 		Vehicle->setRespawnLocation(this->GetActorLocation());
 	}
 }

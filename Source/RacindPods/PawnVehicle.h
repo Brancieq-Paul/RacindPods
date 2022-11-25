@@ -34,6 +34,17 @@ public:
 	void setRespawnLocation(FVector LocToSave);
 	FVector getRespawnLocation();
 
+	void increaseLap();
+	UFUNCTION(Category = Race, BlueprintCallable, BlueprintPure)
+		int getCurrentLap();
+
+	void endGame();
+	void startTimer();
+
+	// Timer variables
+	UPROPERTY(Category = Timer, EditDefaultsOnly, BlueprintReadOnly)
+		int seconds;
+
 	// Camera variables
 	UPROPERTY(Category = Camera, EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 		class USpringArmComponent* SpringArm;
@@ -89,7 +100,12 @@ public:
 		float GearSwitchTime = 0.15f;
 	UPROPERTY(Category = Gearbox, EditDefaultsOnly, BlueprintReadOnly)
 		float GearAutoBoxLatency = 1.0f;
+
+	// Race variables
+	UPROPERTY(Category = Race, EditAnywhere, BlueprintReadOnly)
+		int maxCurrentLap = 3;
 		
 private:
 	FVector RespawnLocation;
+	int currentLap = 0;
 };
