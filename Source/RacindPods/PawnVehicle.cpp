@@ -5,6 +5,7 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
 #include "WheeledVehicleMovementcomponent4w.h"
+#include "Kismet/GameplayStatics.h"
 
 #define print(text) if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 1.5, FColor::Green,text)
 #define printf(text, fstring) if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT(text), fstring))
@@ -137,6 +138,7 @@ int APawnVehicle::getCurrentLap()
 void APawnVehicle::endGame()
 {
 	print("ENDGAME");
+	UGameplayStatics::OpenLevel(GetWorld(), FName("MainMenu"), true);
 }
 
 void APawnVehicle::startTimer()
