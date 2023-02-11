@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "GravitySystemComponent.h"
 #include "CoreMinimal.h"
 #include "WheeledVehicle.h"
 #include "PawnVehicle.generated.h"
@@ -21,6 +22,10 @@ public:
 
 	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
 
+	// Components
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
+		class UGravitySystemComponent* GravitySystemComponent;
+	
 	// Moving forward / right
 	void ApplyThrottle(float Val); // Val = how much force we want to apply
 	void ApplySteering(float Val);
@@ -40,6 +45,7 @@ public:
 
 	void endGame();
 	void startTimer();
+	
 
 	// Timer variables
 	UPROPERTY(Category = Timer, EditDefaultsOnly, BlueprintReadOnly)

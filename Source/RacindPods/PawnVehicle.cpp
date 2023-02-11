@@ -41,6 +41,9 @@ APawnVehicle::APawnVehicle()
 	Vehicle4W->TransmissionSetup.bUseGearAutoBox = GearAutoBox;
 	Vehicle4W->TransmissionSetup.GearSwitchTime = GearSwitchTime;
 	Vehicle4W->TransmissionSetup.GearAutoBoxLatency = GearAutoBoxLatency;
+	
+
+	GravitySystemComponent = CreateDefaultSubobject<UGravitySystemComponent>(TEXT("GravitySystemComponent"));
 
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArm"));
 	SpringArm->SetupAttachment(RootComponent);
