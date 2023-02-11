@@ -24,7 +24,7 @@ public:
 		float GravityStrength;
 
 	UPROPERTY(Category = "GravitySystem", EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-		float Weight;
+		float Priority;
 
 	UFUNCTION(BlueprintCallable, Category = "GravitySystem")
 		virtual FVector GetForce(FVector position);

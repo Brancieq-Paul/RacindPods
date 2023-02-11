@@ -50,14 +50,14 @@ void UGravitySystemComponent::TickComponent(float DeltaTime, ELevelTick TickType
 
 TArray<AGravityField *> UGravitySystemComponent::SelectStrongestGravityFields() {
 	TArray<AGravityField *> StrongestGravityFields;
-	float MaxWeight = 0;
+	float MaxPriority = 0;
 	for (AGravityField* GravityField : OverlappingGravityFields) {
-		if (GravityField->Weight > MaxWeight) {
-			MaxWeight = GravityField->Weight;
+		if (GravityField->Priority > MaxPriority) {
+			MaxPriority = GravityField->Priority;
 			StrongestGravityFields.Empty();
 			StrongestGravityFields.Add(GravityField);
 		}
-		else if (GravityField->Weight == MaxWeight) {
+		else if (GravityField->Priority == MaxPriority) {
 			StrongestGravityFields.Add(GravityField);
 		}
 	}
