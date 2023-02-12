@@ -55,6 +55,9 @@ APawnVehicle::APawnVehicle()
 void APawnVehicle::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	ApplyAirControl(DeltaTime);
+	ConsumeMovementInputVector();
 }
 
 void APawnVehicle::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -68,6 +71,8 @@ void APawnVehicle::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 
 	PlayerInputComponent->BindAction("Handbrake", IE_Pressed, this, &APawnVehicle::OnHandbrakePressed);
 	PlayerInputComponent->BindAction("Handbrake", IE_Released, this, &APawnVehicle::OnHandbrakeReleased);
+
+	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &APawnVehicle::OnJumpPressed);
 }
 
 void APawnVehicle::ApplyThrottle(float Val)
@@ -98,12 +103,65 @@ void APawnVehicle::Turn(float Val)
 
 void APawnVehicle::OnHandbrakePressed()
 {
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("HANDBRAKE"));
 	GetVehicleMovementComponent()->SetHandbrakeInput(true);
 }
 
 void APawnVehicle::OnHandbrakeReleased()
 {
 	GetVehicleMovementComponent()->SetHandbrakeInput(false);
+}
+
+void APawnVehicle::OnJumpPressed()
+{
+	const FVector JumpVector = FVector(1000, 1000, 1000);
+	UWheeledVehicleMovementComponent* MovmentComponent = GetVehicleMovementComponent();
+	UPrimitiveComponent* RootPrimitive = Cast<UPrimitiveComponent>(GetRootComponent());
+
+	//MovmentComponent->SetJumpAllowed(true);
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("JUMP"));
+	//MovmentComponent->UpdatedPrimitive->ComponentVelocity.Z = 1000;
+	//MovmentComponent->AddInputVector(JumpVector, 1);
+	//GetVehicleMovementComponent()->Velocity = JumpVector;
+	//AddMovementInput(JumpVector, 1000, true);
+	//ConsumeMovementInputVector();
+	//RootPrimitive->AddImpulse(JumpVector);
+	RootPrimitive->AddRadialImpulse(GetActorLocation(), 1000, 1000, ERadialImpulseFalloff::RIF_Constant, true);
+}
+
+void APawnVehicle::ApplyAirControl(float DeltaTime)
+{
+	if (UWheeledVehicleMovementComponent4W* MovmentComponent = CastChecked<UWheeledVehicleMovementComponent4W>(GetVehicleMovementComponent()))
+	{
+		FCollisionQueryParams CoQuery;
+		CoQuery.AddIgnoredActor(this);
+
+		const FVector StartTrace = GetActorLocation() + FVector(0.f, 0.f, 50.f);
+		const FVector EndTrace = GetActorLocation() - FVector(0.f, 0.f, 200.f);
+
+		FHitResult Hit;
+
+		const bool isInAir = !GetWorld()->LineTraceSingleByChannel(Hit, StartTrace, EndTrace, ECC_Visibility, CoQuery);
+		const bool isNotGrounded = FVector::DotProduct(GetActorUpVector(), FVector::UpVector) < 0.1f;
+
+		if (isInAir || isNotGrounded)
+		{
+			const float ForwardInput = InputComponent->GetAxisValue("Throttle");
+			const float RightInput = InputComponent->GetAxisValue("Steer");
+
+			const float AirMovmentForcePitch = 3.f;
+			const float AirMovmentForceRoll = !isInAir && isNotGrounded ? 20.f : 3.f;
+
+			if (UPrimitiveComponent* VehicleMesh = MovmentComponent->UpdatedPrimitive)
+			{
+				const FVector MovmentVector = FVector(RightInput * -AirMovmentForceRoll, ForwardInput * AirMovmentForcePitch, 0.f) * DeltaTime * 200.f;
+				const FVector AngularMovment = GetActorRotation().RotateVector(MovmentVector);
+
+				VehicleMesh->SetPhysicsAngularVelocity(AngularMovment, true);
+			}
+		}
+	}
+
 }
 
 void APawnVehicle::setRespawnLocation(FVector LocToSave)

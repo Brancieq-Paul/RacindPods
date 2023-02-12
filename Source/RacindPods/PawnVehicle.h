@@ -31,6 +31,10 @@ public:
 	void OnHandbrakePressed();
 	void OnHandbrakeReleased();
 
+	void OnJumpPressed();
+
+	void ApplyAirControl(float DeltaTime);
+
 	void setRespawnLocation(FVector LocToSave);
 	FVector getRespawnLocation();
 
