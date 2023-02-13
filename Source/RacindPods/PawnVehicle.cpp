@@ -139,13 +139,13 @@ void APawnVehicle::ApplyAirControl(float DeltaTime)
 		FCollisionQueryParams CoQuery;
 		CoQuery.AddIgnoredActor(this);
 
-		const FVector StartTrace = GetActorLocation() + FVector(0.f, 0.f, 50.f);
-		const FVector EndTrace = GetActorLocation() - FVector(0.f, 0.f, 200.f);
+		const FVector StartTrace = GetActorLocation() - GravitySystemComponent->GetCurrentGravityDirection() * 50;
+		const FVector EndTrace = GetActorLocation() + GravitySystemComponent->GetCurrentGravityDirection() * 200;
 
 		FHitResult Hit;
 
 		const bool isInAir = !GetWorld()->LineTraceSingleByChannel(Hit, StartTrace, EndTrace, ECC_Visibility, CoQuery);
-		const bool isNotGrounded = FVector::DotProduct(GetActorUpVector(), FVector::UpVector) < 0.1f;
+		const bool isNotGrounded = FVector::DotProduct(GetActorUpVector(), GravitySystemComponent->GetCurrentGravityDirection() * -1) < 0.1f;
 
 		if (isInAir || isNotGrounded)
 		{
